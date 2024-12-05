@@ -1,5 +1,6 @@
 # This file was automatically generated
-name: needful_things
+name: isucon14
 type: duckdb
 options:
-  filename: needful_things.duckdb
+  filename: isucon14.duckdb
+
