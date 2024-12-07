@@ -8,14 +8,17 @@ SELECT id, format('{} | {:d} | {}', strftime(created_at, '%H:%M:%S'), score::INT
 
 <Dropdown data={reports} name=report_id value=id label=label title=対象 />
 
+<Checkbox title="initializeを除く" name=without_initialize defaultValue=true />
+
 # By Count
 
+リクエスト毎の回数とステータスコード
+
 ```sql web_by_count
-SELECT cnt/sum(cnt) OVER () AS 'cnt_pct', * EXCLUDE(report_id) FROM isucon14.web_by_count WHERE report_id = ${inputs.report_id.value} ORDER BY cnt DESC;
+SELECT * EXCLUDE(report_id) FROM isucon14.web_by_count WHERE report_id = ${inputs.report_id.value} AND (NOT ${inputs.without_initialize} OR Pattern NOT LIKE '%initialize%') ORDER BY cnt DESC;
 ```
 
 <DataTable data={web_by_count} rows=50 search=true>
-  <Column id=cnt_pct title="Cnt%" contentType=colorscale />
   <Column id=cnt contentType=colorscale />
   <Column id=1xx contentType=colorscale />
   <Column id=2xx contentType=colorscale />
@@ -29,12 +32,13 @@ SELECT cnt/sum(cnt) OVER () AS 'cnt_pct', * EXCLUDE(report_id) FROM isucon14.web
 
 # By Latency
 
+リクエスト毎の応答時間
+
 ```sql web_by_latency
-SELECT Sum/sum(Sum) OVER () AS sum_pct, * EXCLUDE(report_id) FROM isucon14.web_by_latency WHERE report_id = ${inputs.report_id.value};
+SELECT * EXCLUDE(report_id) FROM isucon14.web_by_latency WHERE report_id = ${inputs.report_id.value} AND (NOT ${inputs.without_initialize} OR Pattern NOT LIKE '%initialize%')
 ```
 
 <DataTable data={web_by_latency} rows=50 search=true>
-  <Column id=sum_pct title="Sum%" contentType=colorscale />
   <Column id=cnt contentType=colorscale />
   <Column id=sum contentType=colorscale />
   <Column id=min contentType=colorscale />
@@ -48,12 +52,13 @@ SELECT Sum/sum(Sum) OVER () AS sum_pct, * EXCLUDE(report_id) FROM isucon14.web_b
 
 # By Upload Bytes
 
+リクエスト毎のアップロード量
+
 ```sql web_by_upload_bytes
-SELECT Sum/sum(Sum) OVER () AS sum_pct, * EXCLUDE(report_id) FROM isucon14.web_by_upload_bytes WHERE report_id = ${inputs.report_id.value};
+SELECT * EXCLUDE(report_id) FROM isucon14.web_by_upload_bytes WHERE report_id = ${inputs.report_id.value} AND (NOT ${inputs.without_initialize} OR Pattern NOT LIKE '%initialize%');
 ```
 
 <DataTable data={web_by_upload_bytes} rows=50 search=true>
-  <Column id=sum_pct title="Sum%" contentType=colorscale />
   <Column id=cnt contentType=colorscale />
   <Column id=sum contentType=colorscale />
   <Column id=min contentType=colorscale />
@@ -67,12 +72,13 @@ SELECT Sum/sum(Sum) OVER () AS sum_pct, * EXCLUDE(report_id) FROM isucon14.web_b
 
 # By Download Bytes
 
+リクエスト毎のダウンロード量
+
 ```sql web_by_download_bytes
-SELECT Sum/sum(Sum) OVER () AS sum_pct, * EXCLUDE(report_id) FROM isucon14.web_by_download_bytes WHERE report_id = ${inputs.report_id.value};
+SELECT * EXCLUDE(report_id) FROM isucon14.web_by_download_bytes WHERE report_id = ${inputs.report_id.value} AND (NOT ${inputs.without_initialize} OR Pattern NOT LIKE '%initialize%');
 ```
 
 <DataTable data={web_by_download_bytes} rows=50 search=true>
-  <Column id=sum_pct title="Sum%" contentType=colorscale />
   <Column id=cnt contentType=colorscale />
   <Column id=sum contentType=colorscale />
   <Column id=min contentType=colorscale />
@@ -86,65 +92,72 @@ SELECT Sum/sum(Sum) OVER () AS sum_pct, * EXCLUDE(report_id) FROM isucon14.web_b
 
 # Top Protocols
 
+プロトコルランキング
+
 ```sql web_top_protocols
-SELECT cnt/sum(cnt) OVER () AS cnt_pct, * EXCLUDE(report_id) FROM isucon14.web_top_protocols WHERE report_id = ${inputs.report_id.value};
+SELECT * EXCLUDE(report_id) FROM isucon14.web_top_protocols WHERE report_id = ${inputs.report_id.value};
 ```
 
 <DataTable data={web_top_protocols} rows=50 search=true rowNumbers=true>
-  <Column id=cnt_pct title="Cnt%" contentType=colorscale />
-  <Column id=cnt contentType=colorscale />
+  <Column id=cnt contentType=bar />
   <Column id=Protocol />
 </DataTable>
 
 # Top RemoteAddr
 
+接続元ランキング
+
 ```sql web_top_remoteaddr
-SELECT cnt/sum(cnt) OVER () AS cnt_pct, * EXCLUDE(report_id) FROM isucon14.web_top_remoteaddr WHERE report_id = ${inputs.report_id.value};
+SELECT * EXCLUDE(report_id) FROM isucon14.web_top_remoteaddr WHERE report_id = ${inputs.report_id.value};
 ```
 
 <DataTable data={web_top_remoteaddr} rows=50 search=true rowNumbers=true>
-  <Column id=cnt_pct title="Cnt%" contentType=colorscale />
-  <Column id=cnt contentType=colorscale />
+  <Column id=cnt contentType=bar />
   <Column id=RemoteAddr />
 </DataTable>
 
 # Top Host
 
+Hostヘッダーランキング
+
 ```sql web_top_host
-SELECT cnt/sum(cnt) OVER () AS cnt_pct, * EXCLUDE(report_id) FROM isucon14.web_top_host WHERE report_id = ${inputs.report_id.value};
+SELECT * EXCLUDE(report_id) FROM isucon14.web_top_host WHERE report_id = ${inputs.report_id.value};
 ```
 
 <DataTable data={web_top_host} rows=50 search=true rowNumbers=true>
-  <Column id=cnt_pct title="Cnt%" contentType=colorscale />
-  <Column id=cnt contentType=colorscale />
+  <Column id=cnt contentType=bar />
   <Column id=Host />
 </DataTable>
 
 # Top Method
 
+リクエストメソッドランキング
+
 ```sql web_top_method
-SELECT cnt/sum(cnt) OVER () AS cnt_pct, * EXCLUDE(report_id) FROM isucon14.web_top_method WHERE report_id = ${inputs.report_id.value};
+SELECT * EXCLUDE(report_id) FROM isucon14.web_top_method WHERE report_id = ${inputs.report_id.value};
 ```
 
 <DataTable data={web_top_method} rows=50 search=true rowNumbers=true>
-  <Column id=cnt_pct title="Cnt%" contentType=colorscale />
-  <Column id=cnt contentType=colorscale />
+  <Column id=cnt contentType=bar />
   <Column id=Method />
 </DataTable>
 
 # Top Status
 
+ステータスコードランキング
+
 ```sql web_top_status
-SELECT cnt/sum(cnt) OVER () AS cnt_pct, * EXCLUDE(report_id) FROM isucon14.web_top_status WHERE report_id = ${inputs.report_id.value};
+SELECT * EXCLUDE(report_id) FROM isucon14.web_top_status WHERE report_id = ${inputs.report_id.value};
 ```
 
 <DataTable data={web_top_status} rows=50 search=true rowNumbers=true>
-  <Column id=cnt_pct title="Cnt%" contentType=colorscale />
-  <Column id=cnt contentType=colorscale />
+  <Column id=cnt contentType=bar />
   <Column id=Status />
 </DataTable>
 
 # Top Latency
+
+応答時間ランキング
 
 ```sql web_top_latency
 SELECT * EXCLUDE(report_id) FROM isucon14.web_top_latency WHERE report_id = ${inputs.report_id.value};
@@ -152,16 +165,18 @@ SELECT * EXCLUDE(report_id) FROM isucon14.web_top_latency WHERE report_id = ${in
 
 <DataTable data={web_top_latency} rows=50 search=true compact=true rowNumbers=true>
   <Column id=rank />
-  <Column id=Latency contentType=colorscale />
+  <Column id=Latency contentType=bar />
   <Column id=Method />
   <Column id=Host />
-  <Column id=URL />
+  <Column id=URL title=Path />
 </DataTable>
 
 # Top SSL
 
+SSLランキング
+
 ```sql web_top_ssl
-SELECT * EXCLUDE(report_id) FROM isucon14.web_top_ssl WHERE report_id = ${inputs.report_id.value};
+SELECT cnt,* EXCLUDE(cnt,report_id) FROM isucon14.web_top_ssl WHERE report_id = ${inputs.report_id.value};
 ```
 
 <DataTable data={web_top_ssl} rows=50 search=true>
@@ -169,25 +184,26 @@ SELECT * EXCLUDE(report_id) FROM isucon14.web_top_ssl WHERE report_id = ${inputs
 
 # Request Headers
 
+リクエスト毎のリクエストヘッダーパターン
+
 ```sql web_request_headers
-SELECT * EXCLUDE(report_id) FROM isucon14.web_request_headers WHERE report_id = ${inputs.report_id.value};
+SELECT Method || ' ' || Pattern AS request, headers, cnt FROM isucon14.web_request_headers WHERE report_id = ${inputs.report_id.value} AND (NOT ${inputs.without_initialize} OR Pattern NOT LIKE '%initialize%') ORDER BY Pattern, Method;
 ```
 
-<DataTable data={web_request_headers} rows=50 search=true>
-  <Column id=cnt contentType=colorscale />
-  <Column id=Method />
-  <Column id=Pattern />
+<DataTable data={web_request_headers} rows=50 groupBy=request accordionRowColor=#f2f2f2 search=true>
   <Column id=headers />
+  <Column id=cnt contentType=colorscale />
 </DataTable>
 
 # Request Headers Analysis
+
+リクエストヘッダーの利用回数、ユニーク回数、エントロピー、最頻値
 
 ```sql web_request_headers_analysis
 SELECT * EXCLUDE(report_id) FROM isucon14.web_request_headers_analysis WHERE report_id = ${inputs.report_id.value};
 ```
 
 <DataTable data={web_request_headers_analysis} rows=50 search=true>
-  <!-- Column id=cum_pct title="Cum%" contentType=colorscale / -->
   <Column id=key />
   <Column id=cnt contentType=colorscale />
   <Column id=uniqCnt contentType=colorscale />
@@ -207,22 +223,27 @@ SELECT * EXCLUDE(report_id) FROM isucon14.web_cookies_count WHERE report_id = ${
   data={web_cookies_count}
   x=cnt
   xAxisTitle="リクエスト回数"
+  yAxisTitle="セッション数"
+  yGridlines=false
+  xBaseline=false
 />
 
 # Response Headers
 
+リクエスト毎のレスポンスヘッダーパターン
+
 ```sql web_response_headers
-SELECT * EXCLUDE(report_id) FROM isucon14.web_response_headers WHERE report_id = ${inputs.report_id.value};
+SELECT Method || ' ' || Pattern AS request, headers, cnt FROM isucon14.web_response_headers WHERE report_id = ${inputs.report_id.value} AND (NOT ${inputs.without_initialize} OR Pattern NOT LIKE '%initialize%') ORDER BY Pattern, Method;
 ```
 
-<DataTable data={web_response_headers} rows=50 search=true>
-  <Column id=cnt contentType=colorscale />
-  <Column id=Method />
-  <Column id=Pattern />
+<DataTable data={web_response_headers} rows=50 groupBy=request accordionRowColor=#f2f2f2 search=true>
   <Column id=headers />
+  <Column id=cnt contentType=colorscale />
 </DataTable>
 
 # Response Headers Analysis
+
+レスポンスヘッダーの利用回数、ユニーク回数、エントロピー、最頻値
 
 ```sql web_response_headers_analysis
 SELECT * EXCLUDE(report_id) FROM isucon14.web_response_headers_analysis WHERE report_id = ${inputs.report_id.value};
@@ -238,6 +259,8 @@ SELECT * EXCLUDE(report_id) FROM isucon14.web_response_headers_analysis WHERE re
 </DataTable>
 
 # All Errors
+
+ステータスコードが400以上
 
 ```sql web_all_errors
 SELECT * EXCLUDE(report_id) FROM isucon14.web_all_errors WHERE report_id = ${inputs.report_id.value};
