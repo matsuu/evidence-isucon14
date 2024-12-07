@@ -13,7 +13,7 @@ SELECT *, 'https://github.com/matsuu/isucon14f/tree/' || hash AS github, substri
 <DataTable data={scores}>
   <Column id=id />
   <Column id=created_at fmt="YYYY-MM-DD hh:mm:ss" />
-  <Column id=score contentType=colorscale />
+  <Column id=score />
   <Column id=github contentType=link linkLabel=short title=Commit />
   <Column id=comment />
 </DataTable>
