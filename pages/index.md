@@ -3,7 +3,7 @@ title: Score
 ---
 
 ```sql scores
-SELECT *, 'https://github.com/matsuu/isucon14f/tree/' || hash AS github FROM isucon14.reports ORDER BY id;
+SELECT *, 'https://github.com/matsuu/isucon14f/tree/' || hash AS github, substring(hash, 1, 7) AS short FROM isucon14.reports ORDER BY id;
 ```
 
 <LineChart data={scores} x=created_at y=score xFmt="YYYY-MM-DD hh:mm:ss">
@@ -14,6 +14,6 @@ SELECT *, 'https://github.com/matsuu/isucon14f/tree/' || hash AS github FROM isu
   <Column id=id />
   <Column id=created_at fmt="YYYY-MM-DD hh:mm:ss" />
   <Column id=score contentType=colorscale />
-  <Column id=github contentType=link linkLabel=hash title=Commit />
+  <Column id=github contentType=link linkLabel=short title=Commit />
   <Column id=comment />
 </DataTable>
