@@ -10,7 +10,7 @@ SELECT *, 'https://github.com/matsuu/isucon14f/tree/' || hash AS github, substri
   <ReferenceArea xMin="2024-12-08 19:00:00" xMax="2024-12-09 03:00:00" />
 </LineChart>
 
-<DataTable data={scores}>
+<DataTable data={scores} rows=20>
   <Column id=id />
   <Column id=created_at fmt="YYYY-MM-DD hh:mm:ss" />
   <Column id=score />
