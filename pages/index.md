@@ -7,7 +7,9 @@ SELECT *, 'https://github.com/matsuu/isucon14f/commit/' || hash AS github, subst
 ```
 
 <LineChart data={scores} x=created_at y=score xFmt="YYYY-MM-DD hh:mm:ss">
-  <ReferenceArea xMin="2024-12-08 19:00:00" xMax="2024-12-09 03:00:00" />
+  <ReferenceArea xMin="2024-12-08 10:00:00" xMax="2024-12-08 18:00:00" label="本番" />
+  <ReferenceArea xMin="2024-12-09 16:00:00" xMax="2024-12-16 16:00:00" label="感想戦" color=green />
+  <ReferenceLine y=58153 label="本番1位スコア" color=red />
 </LineChart>
 
 <DataTable data={scores} rows=20>
