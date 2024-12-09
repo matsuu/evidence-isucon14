@@ -12,10 +12,10 @@ SELECT *, 'https://github.com/matsuu/isucon14f/commit/' || hash AS github, subst
   <ReferenceLine y=58153 label="本番1位スコア" color=red />
 </LineChart>
 
-<DataTable data={scores} rows=20>
+<DataTable data={scores} rows=100>
   <Column id=id />
   <Column id=created_at fmt="YYYY-MM-DD hh:mm:ss" />
-  <Column id=score />
+  <Column id=score fmt=num0 />
   <Column id=github contentType=link linkLabel=short title=Commit />
   <Column id=comment />
 </DataTable>
