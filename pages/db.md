@@ -3,10 +3,10 @@ title: db
 ---
 
 ```sql reports
-SELECT id, format('{} | {:d} | {}', strftime(created_at, '%H:%M:%S'), score::INTEGER, comment) AS label FROM isucon14.reports ORDER BY id DESC;
+SELECT id, format('{} | {:d} | {}', strftime(created_at, '%Y-%m-%d %H:%M:%S'), score::INTEGER, comment) AS label FROM isucon14.reports ORDER BY id DESC;
 ```
 
-<Dropdown data={reports} name=report_id value=id label=label title=対象 />
+<Dropdown data={reports} name=report_id value=id label=label title=対象 order="id desc" />
 
 # Slow Query
 
