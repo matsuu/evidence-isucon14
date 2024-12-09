@@ -3,7 +3,7 @@ title: Score
 ---
 
 ```sql scores
-SELECT *, 'https://github.com/matsuu/isucon14f/tree/' || hash AS github, substring(hash, 1, 7) AS short FROM isucon14.reports ORDER BY id;
+SELECT *, 'https://github.com/matsuu/isucon14f/commit/' || hash AS github, substring(hash, 1, 7) AS short FROM isucon14.reports ORDER BY id;
 ```
 
 <LineChart data={scores} x=created_at y=score xFmt="YYYY-MM-DD hh:mm:ss">
