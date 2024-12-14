@@ -1,1 +1,1 @@
-SELECT * FROM web_cont_per_second;
+SELECT * FROM web_count_per_second;
