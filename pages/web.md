@@ -10,6 +10,16 @@ SELECT id, format('{} | {:d} | {}', strftime(created_at, '%Y-%m-%d %H:%M:%S'), s
 
 <Checkbox title="initializeを除く" name=without_initialize defaultValue=true />
 
+# Count Per Second by Status
+
+ステータスコード別アクセス数推移
+
+```sql web_count_per_second
+SELECT * EXCLUDE(report_id) FROM isucon14.web_count_per_second WHERE report_id = ${inputs.report_id.value} ORDER BY StartTime, Status;
+```
+
+<BarChart data={web_count_per_second} x=StartTime y=cnt series=Status />
+
 # By Count
 
 リクエスト毎の回数とステータスコード
