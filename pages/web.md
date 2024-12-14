@@ -18,7 +18,7 @@ SELECT id, format('{} | {:d} | {}', strftime(created_at, '%Y-%m-%d %H:%M:%S'), s
 SELECT * EXCLUDE(report_id) FROM isucon14.web_count_per_second WHERE report_id = ${inputs.report_id.value} ORDER BY StartTime, Status;
 ```
 
-<BarChart data={web_count_per_second} x=StartTime y=cnt series=Status />
+<BarChart data={web_count_per_second} x=StartTime y=cnt series=Status xFmt="yyyy-mm-dd hh:mm:ss" />
 
 # By Count
 
