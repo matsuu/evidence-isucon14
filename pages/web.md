@@ -175,6 +175,7 @@ SELECT * EXCLUDE(report_id) FROM isucon14.web_top_latency WHERE report_id = ${in
 
 <DataTable data={web_top_latency} rows=50 search=true compact=true rowNumbers=true>
   <Column id=rank />
+  <Column id=StartTime fmt="yyyy-mm-dd hh:mm:ss.000" />
   <Column id=Latency contentType=bar />
   <Column id=Method />
   <Column id=Host />
